@@ -1,0 +1,148 @@
+<!--For Dane-->
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script type="text/javascript" src="http://www.veryhuo.com/uploads/common/js/jquery-1.3.2.js"></script>
+<title>Color Selector</title> 
+<style>
+h1 {
+font:bold 15px/19px Georgia, serif;
+}
+p {margin:0;}
+#previewer {
+margin:26px 0 20px 0;
+padding:6px;
+clear:left;
+font:bold 19px/25px Verdana;
+border:1px solid #ccc;
+width:80%;
+}
+</style>
+<script type="text/javascript" language="javascript"> 
+//For Preview
+$(function(){
+$("#inputText").keyup(function(){
+$("#previewer").empty();
+$("#previewer").text($(this).attr("value"));
+});
+});
+//Build ColorPanel
+var ColorHex=new Array('00','33','66','99','CC','FF') 
+var SpColorHex=new Array('FF0000','00FF00','0000FF','FFFF00','00FFFF','FF00FF') 
+var current=null 
+function intocolor(){ 
+var colorTable='' 
+for (i=0;i<2;i++){ 
+for (j=0;j<6;j++){ 
+colorTable=colorTable+'<tr height=12>' 
+colorTable=colorTable+'<td width=11 style="background-color:#000000">' 
+if (i==0){ 
+colorTable=colorTable+'<td width=11 style="background-color:#'+ColorHex[j]+ColorHex[j]+ColorHex[j]+'">'} 
+else{ 
+colorTable=colorTable+'<td width=11 style="background-color:#'+SpColorHex[j]+'">'} 
+colorTable=colorTable+'<td width=11 style="background-color:#000000">' 
+for (k=0;k<3;k++){ 
+for (l=0;l<6;l++){ 
+colorTable=colorTable+'<td width=11 style="background-color:#'+ColorHex[k+i*3]+ColorHex[l]+ColorHex[j]+'">' 
+} 
+} 
+} 
+} 
+colorTable='<br/><br/><br/><br/><br/><br/><br/><br/><br/><table width=253 border="0" cellspacing="0" cellpadding="0" style="border:1px #000000 solid;border-bottom:none;border-collapse: collapse" bordercolor="000000">'+'<tr height=30><td colspan=21 bgcolor=#cccccc>'+'<table cellpadding="0" cellspacing="1" border="0" style="border-collapse: collapse">'+'<tr><td width="3"><input type="text" name="DisColor" size="6" disabled style="border:solid 1px #000000;background-color:#ffff00"></td>'+'<td width="3"><td><input type="text" name="HexColor" size="7" style="border:inset 1px;font-family:Arial;" value="#000000"></td></tr></table></td></table>'+'<table border="1" cellspacing="0" cellpadding="0" style="border-collapse: collapse" bordercolor="000000" onmouseover="doOver()" onmouseout="doOut()" onclick="doclick()" style="cursor:hand;">'+colorTable+'</table>'; 
+colorpanel.innerHTML=colorTable 
+} 
+
+//Capital Color Letter
+function doOver() { 
+if ((event.srcElement.tagName=="TD") && (current!=event.srcElement)) { 
+if (current!=null){current.style.backgroundColor = current._background} 
+event.srcElement._background = event.srcElement.style.backgroundColor; 
+DisColor.style.backgroundColor = event.srcElement.style.backgroundColor; 
+HexColor.value = event.srcElement.style.backgroundColor.toUpperCase(); 
+event.srcElement.style.backgroundColor = "white" ;
+current = event.srcElement 
+} 
+} 
+
+//Capital Color Letter
+function doOut() { 
+if (current!=null) current.style.backgroundColor = current._background.toUpperCase(); 
+} 
+
+function doclick(){ 
+if (event.srcElement.tagName == "TD") 
+{ 
+var clr = event.srcElement._background; 
+clr = clr.toUpperCase(); 
+if (targetElement){ 
+
+//Choose Color
+targetElement.value = clr; 
+$("#previewer").css("color",$(TextColor).val());
+$("#previewer").css("backgroundColor",$(BGColor).val());
+} 
+DisplayClrDlg(false); 
+return clr; 
+} 
+} 
+</script> 
+</head> 
+<body> 
+<div id="colorpanel" style="position:absolute;display:none;width:253px;height:177px;"></div>
+<h1>Input Text</h1>
+
+<input type="text" id="inputText" placeholder = "Input Text Here"> 
+<input type="button" id="TextColor" size="20" alt="clrDlg" value="Choose Your Text Color" readonly> 
+<input type="button" id="BGColor" size="20" alt="clrDlg" value="Choose Your Backgroud Color" readonly> 
+<br clear="both" />
+<p id="previewer"></p>
+<script type="text/javascript" language="javascript"> 
+var targetElement = null;  
+function OnDocumentClick(){ 
+var srcElement = event.srcElement; 
+if (srcElement.alt == "clrDlg") 
+{  
+targetElement = event.srcElement; 
+DisplayClrDlg(true); 
+
+} 
+else{ 
+//Check if clicked on the Colorpanel
+while (srcElement && srcElement.id!="colorpanel"){ 
+srcElement = srcElement.parentElement; 
+} 
+if (!srcElement){ 
+//Not clicked on the Colorpanel
+DisplayClrDlg(false); 
+} 
+} 
+} 
+
+
+//Show ColorPanel
+function DisplayClrDlg(display){ 
+var clrPanel = document.getElementById("colorpanel"); 
+if (display){ 
+var left = document.body.scrollLeft + event.clientX; 
+var top = document.body.scrollTop + event.clientY; 
+if (event.clientX+clrPanel.style.pixelWidth > document.body.clientWidth){ 
+//This is to make sure colorpanel to be blocked by mouse, I don't get it, you can delete it 
+left -= clrPanel.style.pixelWidth; 
+} 
+if (event.clientY+clrPanel.style.pixelHeight > document.body.clientHeight){ 
+top -= clrPanel.style.pixelHeight; 
+} 
+clrPanel.style.pixelLeft = left; 
+clrPanel.style.pixelTop = top; 
+clrPanel.style.display = "block"; 
+} 
+else{ 
+clrPanel.style.display = "none"; 
+} 
+}  
+
+document.body.onclick = OnDocumentClick; 
+document.body.onload = intocolor; 
+</script> 
+</body> 
+</html> 
