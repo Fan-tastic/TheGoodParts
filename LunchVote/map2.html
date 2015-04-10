@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{width:100%;height:500px;}
+		p{margin-left:5px; font-size:14px;}
+		#voteTable{
+			position: absolute;
+            left: 616px;
+            top: 10px;
+		}
+	</style>
+	
+	<script type="text/javascript" src="js/jquery.js"></script>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GuItY2z7KS6E5wWm2H3rWMf7"></script>
+	<title>我们投票吧</title>
+</head>
+<body>
+	<header>我们投票吧 v1.0 DEMO <a href="map1.html">English</a></header> 
+	
+	<div>
+	<p><a style="color:red">(定位系统Needed，这里暂时用固定地址）</a></p>
+	<p>或者输入地址来搜索周围的美食！</P>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td>
+	<input id = "search" type="text" placeholder="目前所在地址">
+	<input id = "radius" type="text" placeholder="搜索范围，单位：米">
+	显示结果数量<input id = "pageC" type="text" value="10">
+	<input id = "result" value="搜索" type="button">
+	<div style="width:600px;height:450px;border:#ccc solid 1px;font-size:12px" id="allmap"></div>
+</td></tr></table></div>
+<div id = "voteTable"><table><tr>
+<td><input id = "vote" value="无法抉择？那我们就来投票吧!" type="button" style="display:block"></td></tr></table>
+<div id="voteBox" style="display:none"><p>
+	参与投票人数<a style="color:red">(DEMO中暂时使用下拉列表选择人数，当人数更多时，以后会考虑直接输入人数）</a>
+	<select name="Voters" onchange="show(this)">
+		<option value="0">选择人数</option>
+        <option value="1">2</option>
+        <option value="2">3</option>
+        <option value="3">4</option>
+        <option value="4">5</option>
+        <option value="5">6</option>
+        <option value="6">7</option></p>
+    </select></div>
+
+    <!--目前做的投票板暂时SB,以后慢慢改进-->
+<div id="table1" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div id="table2" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+C
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div id="table3" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+C
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+             <tr align="center">
+            <td>
+D
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div id="table4" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+C
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+             <tr align="center">
+            <td>
+D
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+E
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div id="table5" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+C
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+             <tr align="center">
+            <td>
+D
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+E
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+F
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div id="table6" style='display:none'>
+    <table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+        	<td align="center">
+                投票人
+            </td>
+            <td align="center">
+                餐厅分类
+            </td>
+            <td align="center">
+               价格
+            </td>
+            <td align="center">
+               距离
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+ A
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+B
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+C
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+             <tr align="center">
+            <td>
+D
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+E
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+F
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+G
+            </td>
+            <td>
+            	<input type="checkbox" name="chn">中餐<input type="checkbox" name="wst">西餐<input type="checkbox" name="htp">火锅
+            </td>
+            <td>
+            	<input type="checkbox" name="CostH">高<input type="checkbox" name="CostM">中<input type="checkbox" name="CostL">低
+            </td>
+            <td>
+            	<input type="checkbox" name="DisF">远<input type="checkbox" name="DisM">中<input type="checkbox" name="DisC">近
+            </td>
+        </tr>
+</table>
+</div>
+<div><input type="button" value="计算投票" id="count" style='display:none'></div>
+<div id="des" style = 'display:none;color:red'>说明:距离（远：大于2km;中：介于1-2公里之间；近:1km以内)。价位(高：人均200元以上；中：介于100-200元；低：人均消费低于100元)</div>
+<div id="countResult" style='display:none'><table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+		<td>投票结果</td>
+		<td>价位</td>
+		<td>距离</td>
+	</tr>
+	<tr>
+		<td id = "TypeR"></td>
+		<td id = "CostR"></td>
+		<td id = "DisR"></td>
+	</tr>
+	<tr><td><input type="button" value="开始寻找餐厅!" id="find">
+	</td>
+<td></td>
+<td></td>
+</tr>
+</table>
+</div>
+<div id="ShowResult" style='display:none'><table width="100%" border="1" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+		<td>名字</td>
+		<td id="Name"></td>
+	</tr>
+	<tr>
+        <td>地址</td>
+		<td id="Address"></td>
+	</tr>
+	<tr>
+        <td>距离(米)</td>
+		<td id="Distance"></td>
+	</tr>
+	<tr>
+        <td>电话</td>
+		<td id="Tel"></td>
+	</tr>
+	<tr>
+        <td>人均消费</td>
+		<td id="Price"></td>
+	</tr>
+	<tr>
+        <td>整体评价</td>
+		<td id="ORating"></td>
+	</tr>
+	<tr>
+        <td>服务</td>
+		<td id="SRating"></td>
+	</tr>
+	<tr>
+        <td>环境</td>
+		<td id="ERating"></td>
+	</tr>
+	<tr>
+        <td>团购信息</td>
+		<td id="DetailUrl"></td>
+	</tr>
+</table>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+	// 初始化地图，设定初始显示地址“北京香颂”
+	function initMap(){            // 创建Map实例	
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+	map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+	map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true);  
+}
+	
+	var map = new BMap.Map("allmap"); 
+    var myGeo = new BMap.Geocoder();
+
+	// 将地址解析结果显示在地图上,并调整地图视野
+	$('#result').on("click", function(){
+		    var searchResult = $('#search').val();
+	myGeo.getPoint(searchResult, function(point){
+		if (point) {
+			//map.addOverlay(new BMap.Marker(point));
+			var marker = new BMap.Marker(point);  // 创建标注
+	        map.addOverlay(marker);               // 将标注添加到地图中
+	        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+	        map.enableScrollWheelZoom();
+	        map.centerAndZoom(point,15);
+	        var label = new BMap.Label("欣悦在这里",{offset:new BMap.Size(20,-10)});
+	        marker.setLabel(label);
+	        var radius = parseInt($('#radius').val());
+	        var pageC = parseInt($('#pageC').val());
+	        var circle = new BMap.Circle(point,radius,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+    map.addOverlay(circle);
+    var local =  new BMap.LocalSearch(map,{pageCapacity:pageC,renderOptions: {map: map, autoViewport: false}});  
+    local.searchNearby('餐饮',point,radius);
+    	console.log(point.lng);
+		}else{
+			alert("您选择地址没有解析到结果!");
+		}
+	}, "北京市");
+
+
+});
+
+//自动完成
+//		function G(id) {
+//		return document.getElementById(id);
+//	}
+	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+		{"input" : "search"
+		,"location" : map
+	});
+
+	ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+	var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		$("#search").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+	var _value = e.item.value;
+		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		$("#searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		
+	});
+
+//商家信息
+
+/*$('#result').on("click",function(){
+	    var searchResult = $('#search').val();
+	    myGeo.getPoint(searchResult, function(point){
+			var marker = new BMap.Marker(point);  // 创建标注
+	        map.addOverlay(marker);               // 将标注添加到地图中
+	        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+	        map.enableScrollWheelZoom();
+	        map.centerAndZoom(point,15);
+            var theUrl = "http://api.map.baidu.com/place/v2/search?query=餐馆&location="+point.lat+","+point.lng+"&radius=2000&output=json&ak=GuItY2z7KS6E5wWm2H3rWMf7";
+            //$('#result').append("<tr><td>RouteNO</td><td>Description</td></tr>");
+            $.getJSON(theUrl, function(json){
+                var detail = json.detail_info.price;
+                console.log(detail);
+    });
+ });
+ });*/
+
+//投票机制
+$('#vote').on("click",function(){
+this.style.display="none";
+var voteBox = document.getElementById('voteBox');
+voteBox.style.display="block";
+})
+
+//VOTEPANEL
+function show(obj){
+    var selectedvalue = obj.value;
+    if(selectedvalue==''){
+        selectedvalue = '-1';
+    }
+    for(j=1;j<=6;j++){
+        var divobj = document.getElementById('table'+j);
+        var count = document.getElementById('count');
+        var des = document.getElementById('des');
+        if(parseInt(selectedvalue)==j){
+            divobj.style.display = 'block';
+            count.style.display = 'block';
+            des.style.display = 'block';
+        }else{
+            divobj.style.display = 'none';
+        }
+    }
+}
+
+//投票算法，这个我想了很久，比较复杂，除非控制单选，但是考虑到很多人会有多重选择，硬着头皮弄个简单的算法吧。结合起来考虑太复杂，还是将3个投票选项分开成3个不同的conditions， 然后再整合在一起得出结论，希望这个算法以后能有所改进
+
+//查看结果
+
+$("#count").click(function() {  
+	var countResult = document.getElementById('countResult');
+	countResult.style.display = 'block';
+	function getMax(arr,max) {  
+    if (max == "max") {  
+        return Math.max.apply(Math, arr);  
+    }  
+}  
+//中餐 西餐 或火锅   
+var i = Math.floor(Math.random()*2+1)-1;
+var j = Math.floor(Math.random()*3+1)-1;
+                   var checkedChn = $("input[name=chn]:checked").length;
+                   var checkedWst = $("input[name=wst]:checked").length;
+                   var checkedHtp = $("input[name=htp]:checked").length;  
+                   var array1 = [checkedChn,checkedWst,checkedHtp];
+                   var maxType = getMax(array1,'max');
+                   if (checkedChn==maxType&&checkedHtp<maxType&&checkedWst<maxType){
+                        $("#TypeR").text("中餐");
+                    }else if(checkedHtp==maxType&&checkedChn<maxType&&checkedWst<maxType){
+                        $("#TypeR").text("火锅");
+                    }else if(checkedWst==maxType&&checkedChn<maxType&&checkedHtp<maxType){
+                        $("#TypeR").text("西餐");
+                    }else if(checkedWst==maxType&&checkedChn==maxType&&checkedHtp<maxType){
+                    	var Tp1 = ["中餐","西餐"];
+                        $("#TypeR").text(Tp1[i]);
+                    }else if(checkedWst==maxType&&checkedHtp==maxType&&checkedChn<maxType){
+                    	var Tp2 = ["火锅","西餐"];
+                        $("#TypeR").text(Tp2[i]);
+                    }else if(checkedHtp==maxType&&checkedChn==maxType&&checkedWst<maxType){
+                    	var Tp3 = ["火锅","中餐"]
+                        $("#TypeR").text(Tp3[i]);
+                    }else {
+                    	var Tp4 = ["中餐","西餐","火锅"]
+                        $("#TypeR").text(Tp4[j]);
+                   }
+//价格高 中 或低  
+                   var checkedH = $("input[name=CostH]:checked").length;
+                   var checkedM = $("input[name=CostM]:checked").length;
+                   var checkedL = $("input[name=CostL]:checked").length;  
+                   var array2 = [checkedH,checkedM,checkedL];
+                   var maxType2 = getMax(array2,'max');
+                   if (checkedH==maxType2&&checkedL<maxType2&&checkedM<maxType2){
+                        $("#CostR").text("高");
+                    }else if(checkedL==maxType2&&checkedH<maxType2&&checkedM<maxType2){
+                        $("#CostR").text("低");
+                    }else if(checkedM==maxType2&&checkedH<maxType2&&checkedL<maxType2){
+                        $("#CostR").text("中");
+                    }else if(checkedM==maxType2&&checkedH==maxType2&&checkedL<maxType2){
+                    	var C1 = ["高","中"];
+                        $("#CostR").text(C1[i]);
+                    }else if(checkedM==maxType2&&checkedL==maxType2&&checkedH<maxType2){
+                    	var C2 = ["中","低"];
+                        $("#CostR").text(C2[i]);
+                    }else if(checkedL==maxType2&&checkedH==maxType2&&checkedM<maxType2){
+                        $("#CostR").text("中");
+                    }else {
+                        $("#CostR").text("中");
+                   }
+
+//距离 远 中 或近
+                   var checkedDF = $("input[name=DisF]:checked").length;
+                   var checkedDM = $("input[name=DisM]:checked").length;
+                   var checkedDC = $("input[name=DisC]:checked").length;  
+                   var array2 = [checkedDF,checkedDM,checkedDC];
+                   var maxType3 = getMax(array2,'max');
+                   if (checkedDF==maxType3&&checkedDC<maxType3&&checkedDM<maxType3){
+                        $("#DisR").text("远");
+                    }else if(checkedDC==maxType3&&checkedDF<maxType3&&checkedDM<maxType3){
+                        $("#DisR").text("近");
+                    }else if(checkedDM==maxType3&&checkedDF<maxType3&&checkedDC<maxType3){
+                        $("#DisR").text("中");
+                    }else if(checkedDM==maxType3&&checkedDF==maxType3&&checkedDC<maxType3){
+                    	var D1 = ["远","中"];
+                        $("#DisR").text(D1[i]);
+                    }else if(checkedDM==maxType3&&checkedDC==maxType3&&checkedDF<maxType3){
+                    	var D2 = ["近","中"];
+                        $("#DisR").text(D2[i]);
+                    }else if(checkedDC==maxType3&&checkedDF==maxType3&&checkedDM<maxType3){
+                        $("#DisR").text("中");
+                    }else {
+                        $("#DisR").text("中");
+                   }
+                });   
+
+//寻找餐厅，映射到地图，列出详细信息
+
+$("#find").on("click",function(){
+	
+	var searchResult = $('#search').val();
+	myGeo.getPoint(searchResult, function(point){
+		if (point) {
+			map.centerAndZoom(point, 15);
+			var TypeR = document.getElementById('TypeR').innerHTML;
+			var DisR = document.getElementById('DisR').innerHTML;
+			var radius = 0;
+			if(DisR=="远"){
+                  radius = 3000;
+                  }else if (DisR=="中"){
+                  	radius = 2000;
+                  	}else if(DisR=="近"){
+                  		radius = 1000;
+                  
+                 }
+            var theUrl = "http://api.map.baidu.com/place/v2/search?q="+TypeR+"&radius="+radius+"&filter=industry_type:cater|sort_name:price&location="+point.lat+","+point.lng+"&output=json&ak=GuItY2z7KS6E5wWm2H3rWMf7&scope=2&page_size=10&callback=?";
+            console.log(theUrl);
+
+            $.getJSON(theUrl, function(json){
+                var CostR = document.getElementById('CostR').innerHTML;
+                var i = Math.floor(Math.random() * 3);
+                var j = Math.floor(Math.random() * 4 + 3);
+                var k = Math.floor(Math.random() * 3 + 7);
+                if (CostR=="高"){
+            	var Name = json.results[i].name;
+            	var Address = json.results[i].address;
+            	var tel = json.results[i].telephone;
+            	var distance = json.results[i].detail_info.distance;
+            	var price = json.results[i].detail_info.price;
+            	var ORating = json.results[i].detail_info.overall_rating;
+            	var SRating = json.results[i].detail_info.service_rating;
+            	var ERating = json.results[i].detail_info.environment_rating;
+            	var Rlat = json.results[i].location.lat;
+            	var Rlng = json.results[i].location.lng; 
+            	var uid = json.results[i].uid;
+            }else if(CostR=="中"){
+                var Name = json.results[j].name;
+                var Address = json.results[j].address;
+                var tel = json.results[j].telephone;
+                var distance = json.results[j].detail_info.distance;
+                var price = json.results[j].detail_info.price;
+                var ORating = json.results[j].detail_info.overall_rating;
+                var SRating = json.results[j].detail_info.service_rating;
+                var ERating = json.results[j].detail_info.environment_rating;
+                var Rlat = json.results[j].location.lat;
+                var Rlng = json.results[j].location.lng; 
+                var uid = json.results[j].uid;
+            }else if (CostR=="低"){
+                var Name = json.results[k].name;
+                var Address = json.results[k].address;
+                var tel = json.results[k].telephone;
+                var distance = json.results[k].detail_info.distance;
+                var price = json.results[k].detail_info.price;
+                var ORating = json.results[k].detail_info.overall_rating;
+                var SRating = json.results[k].detail_info.service_rating;
+                var ERating = json.results[k].detail_info.environment_rating;
+                var Rlat = json.results[k].location.lat;
+                var Rlng = json.results[k].location.lng; 
+                var uid = json.results[k].uid;
+            }
+
+            
+var theUrl2 = "http://api.map.baidu.com/place/v2/eventdetail?uid="+uid+"&output=json&ak=GuItY2z7KS6E5wWm2H3rWMf7&callback=?";
+console.log(theUrl2);
+            	var ShowResult = document.getElementById('ShowResult');
+            	ShowResult.style.display='block';
+            	$('#Name').text(Name);
+            	$('#Address').text(Address);
+            	$('#Tel').text(tel);
+            	$('#Distance').text(distance);
+            	$('#Price').text(price);
+            	$('#ORating').text(ORating);
+            	$('#SRating').text(SRating);
+            	$('#ERating').text(ERating);
+$.getJSON(theUrl2, function(json){
+	var CouponDetail = json.result.events.grupn_url_pc;
+	$('#DetailUrl').text(CouponDetail);
+});
+
+            	var point = new BMap.Point(Rlng, Rlat);
+	            map.centerAndZoom(point, 15);
+	            var marker = new BMap.Marker(point);  // 创建标注
+	            map.addOverlay(marker);               // 将标注添加到地图中
+	            marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	            var label = new BMap.Label("这就是我们要去的地方:"+Name,{offset:new BMap.Size(20,-10)});
+	            marker.setLabel(label);
+          });
+
+		}else{
+			alert("您选择地址没有解析到结果!");
+		}
+	}, "北京市");
+
+	
+            });
+
+
+	initMap();
+</script>
