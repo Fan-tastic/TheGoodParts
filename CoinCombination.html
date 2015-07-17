@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>CoinCombination-SporcleInterview</title>
+    <header>CoinCombination-SporcleInterview</header>
+</head>
+<body>
+	Input The Amount<input type = "text" id = "amount" size = "5">
+	<input type = "button" id = "submit" value = "submit" onclick = "Calculate()">
+</br>
+Need 1<input type = "text" id = "First" size = "5">
+</br>
+Need 3<input type = "text" id = "Second" size = "5">
+</br>
+Need 5<input type = "text" id = "Third" size = "5">
+</br>
+Least Coins Need<input type = "text" id = "Total" size = "5">
+<script>
+function Calculate(){
+	var amount,
+	    one,
+	    three,
+	    five;
+
+    amount = document.getElementById("amount").value;
+    one = 0;
+    three = 0;
+    five = 0;
+    while (amount >= 5){
+    	five += 1;
+    	amount -= 5;
+    }
+    while (amount >= 3){
+    	three += 1;
+    	amount -= 3;
+    }
+    while (amount > 0 ){
+    	one += 1;
+    	amount -= 1;
+    }
+
+   document.getElementById("First").value = one;
+   document.getElementById("Second").value = three;
+   document.getElementById("Third").value = five;
+   document.getElementById("Total").value = one + three + five;
+   return;
+}
+</script>
+</body>
+</html>
+   
